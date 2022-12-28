@@ -1,0 +1,47 @@
+{% extends "page_layout.html" %}
+
+{% block title %}
+My Tickets
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="table-container p-3">
+        <h4>Your Tickets</h4>
+        {% if perms.pages.add_ticket %}
+        <a href="{% url 'submit_ticket' %}" class="table-link">
+            Submit New Ticket
+        </a>
+        {% endif %}
+        <table class="table table-hover table-striped table-bordered table-sm" id="tickets-table" style="width: 100%">
+            <caption>List of open tickets</caption>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>More</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                <tr>
+                    <td>{{ ticket.title }}</td>
+                    <td>{{ ticket.description}}</td>
+                    <td>
+                        <a href="{{ ticket.get_absolute_url }}" class="table-link">Details</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function () {
+        $('#tickets-table').DataTable();
+    });
+</script>
+{% endblock extra_js %}

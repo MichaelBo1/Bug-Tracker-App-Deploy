@@ -1,0 +1,53 @@
+{% extends "page_layout.html" %}
+{% load crispy_forms_tags %}
+{% block title %}
+Manage Roles
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-2">
+        <div class="col col-md-4">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button class="btn table-btn" type="submit">
+                    Assign Roles
+                </button>
+            </form>
+        </div>
+        <div class="col col-md-8">
+            <div class="table-container p-3">
+                <h4>Users</h4>
+                <table class="table table-hover table-striped table-bordered table-sm" id="user-table">
+                    <caption>List of verified users</caption>
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.get_user_role_display }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function () {
+        $('#user-table').DataTable();
+    });
+</script>
+{% endblock extra_js %}

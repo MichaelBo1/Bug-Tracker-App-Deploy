@@ -1,0 +1,53 @@
+{% extends "page_layout.html" %}
+
+{% block title %}
+My Projects
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="table-container p-3">
+        <h4> Your Projects</h4>
+        {% if perms.pages.add_project %}
+        <a href="{% url 'create_project' %}" class="mb-3 border-end border-dark pe-1 table-link">
+            Add New Project
+        </a>
+        <a href="{% url 'archived_projects' %}" class="ps-1 table-link">
+            View Archived Projects
+        </a>
+        {% endif %}
+        <table 
+        class="table table-hover table-striped table-bordered table-sm" 
+        id="projects-table"
+        style="width: 100%">
+            <caption>List of active projects</caption>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>More</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project in projects %}
+                <tr>
+                    <td>{{ project.title }}</td>
+                    <td>{{ project.description}}</td>
+                    <td>
+                        <a href="{{ project.get_absolute_url}}" class="table-link">Details</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function () {
+        $('#projects-table').DataTable();
+    });
+</script>
+{% endblock extra_js %}

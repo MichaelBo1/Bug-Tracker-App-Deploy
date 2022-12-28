@@ -1,0 +1,93 @@
+{% extends "page_layout.html" %}
+
+{% block title %}
+Details
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="table-container p-3">
+        <h4>Details for: {{ project.title }}</h4>
+        {% if perms.pages.change_project and project.is_active %}
+        <a class="border-end border-dark pe-1 table-link" href="{% url 'my_projects' %}">Back To List</a>
+        <a class="border-end border-dark pe-1 table-link" href="{% url 'update_project' project.id %}">Edit</a>
+        <a class="table-link" href="{% url 'manage_project_users' project.id %}">Manage Users</a>
+        {% else %}
+        <a href="{% url 'my_projects' %}" class="table-link">Back to List</a>
+        {% endif %}
+        <hr>
+        <div class="row">
+            <div class="col">
+                <p class="text-muted fw-bold">Project Description</p>
+                <p>{{ project.description }}</p>
+            </div>
+            <div class="col">
+                <p class="text-muted fw-bold">Managed By</p>
+                <p>
+                    {% if project.project_manager %}
+                    {{ project.project_manager.username }}
+                    {% else %}
+                    None
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <p class="text-muted fw-bold">Project Users</p>
+                <table class="table table-striped table-hover table-bordered table-sm personnel-table">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for personnel in project.assigned_personnel.all %}
+                        <tr>
+                            <td>{{ personnel.email}}</td>
+                            <td>{{ personnel.username}}</td>
+                            <td>{{ user.get_user_role_display }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col">
+                <p class="text-muted fw-bold">Tickets for this Project</p>
+                <table class="table table-striped table-hover table-bordered table-sm personnel-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>More</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in project.tickets.all %}
+                        <tr>
+                            <td>{{ ticket.title }}</td>
+                            <td>{{ ticket.description}}</td>
+                            <td>{{ ticket.status }}</td>
+                            <td>
+                                <a href="{% url 'ticket_details' ticket.id %}" style="text-decoration: none">Details</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% block extra_js %}
+<script>
+    $(document).ready(function () {
+        $('.personnel-table').DataTable();
+    });
+</script>
+{% endblock extra_js %}

@@ -1,0 +1,56 @@
+{% extends "page_layout.html" %}
+{% block title %}
+About
+{% endblock title %}
+
+{% block content %} 
+<div class="container">
+    <div class="table-container p-3 text-start">
+        <span class="text-center"><h4>About the Project</h4></span>
+        <hr>
+        <p>This is a basic bug tracker application to track bugs, changes, new features etc. in software projects.</p>
+        <p>Bugs are tracked using a ticket system, in which "submitters" submit new tickets corresponding to a current software project.</p>
+        <p>This web application was built primarily using the Django framework.</p>
+        <h5>Roles</h5>
+        <p> There are 4 distinct roles that users can have, each with different permissions and actions that they can perform. Below is a brief description of each role: </p>
+        <p>
+            <span class="fw-bold">Submitter</span>
+            <ul>
+                <li>Create new tickets for projects</li>
+                <li>View and edit tickets they have submitted</li>
+            </ul>
+        </p>
+        <p> 
+            <span class="fw-bold">Developer</span>
+            <ul>
+                <li>View and edit tickets they have been assigned to</li>
+            </ul>
+        </p>
+        <p> 
+            <span class="fw-bold">Project Manager</span>
+            <ul>
+                <li>View and edit tickets for projects they are assigned to</li>
+                <li>View and edit projects they are assigned to</li>
+                <li>View and archived projects</li>
+                <li>Create new projects</li>
+                <li>Manage users assigned to projects</li>
+            </ul>
+        </p>
+        <p> 
+            <span class="fw-bold">Administrator</span>
+            <ul>
+                <li>Assign user roles</li>
+                <li>View and edit all tickets and projects</li>
+                <li>Create new projects</li>
+                <li>Archive projects</li>
+            </ul>
+        </p>
+
+    </div>
+
+
+
+</div>
+
+
+{% endblock content %}
