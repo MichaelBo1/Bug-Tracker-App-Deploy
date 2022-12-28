@@ -1,0 +1,54 @@
+body {
+    background-color: #f9fafb;
+    min-height: 100vh;
+}
+
+
+table thead{
+    background:#337ab7;
+    color:white;
+    text-align:left;
+    vertical-align:center;
+}
+
+.account-card {
+    box-shadow: 5px 5px;
+    border-radius: 1rem;
+}
+
+.blue-txt {
+    color: #337ab7;
+}
+
+.header {
+    background-color: black;
+}
+
+.nav-item :hover {
+    background-color: darkblue;
+}
+
+.sidebar, .signout-dropdown {
+    background-color: #337ab7;
+}
+
+.table-btn {
+    background-color: #337ab7;
+    color: white;
+}
+
+.table-container {
+    background-color: white;
+
+}
+
+.table-header {
+    box-shadow: 10px 5px 5px black;
+    height: 5vh;
+    background-color: #337ab7;
+}
+
+.table-link {
+    text-decoration: None;
+    color: #337ab7;
+}
