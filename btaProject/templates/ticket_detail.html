@@ -1,0 +1,199 @@
+{% extends "page_layout.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Details
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+            <div class="table-container p-3 my-2">
+                <h5>Details for: {{ ticket.title }}</h5>
+                <a class="border-end border-dark pe-1 table-link"
+                    href="{% url 'project_details' ticket.project.id %}">Back
+                    To Project</a>
+                {% if perms.pages.change_ticket %}
+                <a class="border-end border-dark pe-1 table-link" href="{% url 'my_tickets' %}">Back To List</a>
+                <a href="{% url 'update_ticket' ticket.id %}" class="table-link">Edit</a>
+                {% else %}
+                <a href="{% url 'my_tickets' %}" style="text-decoration: none">Back To List</a>
+                {% endif %}
+                <div class="row">
+                    <div class="col">
+                        <span class="fw-bold">Title</span>
+                        <p>
+                            {{ ticket.title }}
+                        </p>
+                    </div>
+                    <div class="col">
+                        <span class="fw-bold">Description</span>
+                        <p>
+                            {{ ticket.description }}
+                        </p>
+
+                    </div>
+                    <hr>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <span class="fw-bold">Assigned Developer</span>
+                        <p>
+                            {% if ticket.assigned_developer %}
+                            {{ ticket.assigned_developer }}
+                            {% else %}
+                            None
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="col">
+                        <span class="fw-bold">Submitted By</span>
+                        <p>
+                            {{ ticket.submitter }}
+                        </p>
+                    </div>
+                    <hr>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <span class="fw-bold">Project</span>
+                        <p>
+                            {{ ticket.project }}
+                        </p>
+                    </div>
+                    <div class="col">
+                        <span class="fw-bold">Priority</span>
+                        <p>
+                            {{ ticket.priority }}
+                        </p>
+                    </div>
+                    <hr>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <span class="fw-bold">Status</span>
+                        <p>
+                            {{ ticket.status }}
+                        </p>
+                    </div>
+                    <div class="col">
+                        <span class="fw-bold">Type</span>
+                        <p>
+                            {{ ticket.type }}
+                        </p>
+                    </div>
+                    <hr>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <span class="fw-bold">Date Created</span>
+                        <p>
+                            {{ ticket.date_created }}
+                        </p>
+                    </div>
+                    <div class="col">
+                        <span class="fw-bold">Last Updated</span>
+                        <p>
+                            {{ ticket.date_updated }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="table-container detail p-3 my-2">
+                <h5>Ticket History</h5>
+                <table class="table table-striped table-hover table-bordered table-sm" id="history-table">
+                    <caption>List of changes to the ticket</caption>
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Previous Value</th>
+                            <th>New Value</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for history in ticket.histories.all %}
+                        <tr>
+                            <td>{{ history.action }}</td>
+                            <td>{{ history.prev_value}}</td>
+                            <td>{{ history.new_value }}</td>
+                            <td>{{ history.date_changed }}</td>
+                        </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col">
+            <div class="table-container p-3 my-2">
+                <h5>Ticket Comments</h5>
+                <form method="POST" action="{% url 'ticket_details' ticket.pk %}">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button class="btn table-btn" type="submit">
+                        Add Comment
+                    </button>
+                </form>
+                <table class="table table-striped table-hover table-bordered table-sm" id="comments-table">
+                    <caption>List of ticket comments</caption>
+                    <thead>
+                        <tr>
+                            <th>Commenter</th>
+                            <th>Message</th>
+                            <th>Posted</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for comment in ticket.comments.all %}
+                        <tr>
+                            <td>{{ comment.commenter }}</td>
+                            <td>{{ comment.message }}</td>
+                            <td>{{ comment.created }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col">
+            <div class="table-container p-3 my-2">
+                <h5>Ticket Files</h5>
+                <a class="btn table-btn" href="{% url 'upload_ticket_file' %}">Upload File</a>
+                <table class="table table-striped table-hover" id="files-table">
+                    <caption>List of ticket files</caption>
+                    <thead>
+                        <tr>
+                            <th>File</th>
+                            <th>Uploaded By</th>
+                            <th>Uploaded</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for file in ticket.files.all %}
+                        <tr>
+                            <td><a href="{{ file.file.url }}" class="table-link">{{ file.file }}</a></td>
+                            <td>{{ file.uploaded_by }}</td>
+                            <td>{{ file.date_uploaded }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock content %}
+{% block extra_js %}
+<script>
+    $(document).ready(function () {
+        $('#comments-table').DataTable();
+        $('#history-table').DataTable();
+        $('#files-table').DataTable();
+    });
+</script>
+{% endblock extra_js %}
