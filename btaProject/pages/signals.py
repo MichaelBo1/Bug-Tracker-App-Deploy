@@ -41,3 +41,11 @@ def record_ticket_history(sender, instance, raw, **kwargs):
                 prev_val=previous_state.priority,
                 new_val=instance.priority,
                 ticket=instance)
+            
+        if previous_state.type != instance.type:
+            add_history(
+                action='Type Changed',
+                prev_val=previous_state.type,
+                new_val=instance.type,
+                ticket=instance
+            )
