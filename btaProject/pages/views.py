@@ -41,7 +41,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
 # Accessible only by administrators
 class ManageUserRolesView(UserAccessMixin, FormView):
-    permission_required = 'accounts.change_customuser'
+    permission_required = 'accounts.change_user'
     model = get_user_model()
     template_name = 'manage_roles.html'
     form_class = UserRolesForm

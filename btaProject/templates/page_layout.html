@@ -39,7 +39,7 @@
                                 <i class="fs-4 fa-solid fa-house"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span>
                             </a>
                         </li>
-                        {% if perms.accounts.change_customuser %}
+                        {% if perms.accounts.change_user %}
                         <li class="nav-item">
                             <a href="{% url 'manage_roles' %}" class="nav-link align-middle px-0 text-white text-decoration-none">
                                 <i class="fs-4 fa-solid fa-user-group"></i> <span class="ms-1 d-none d-sm-inline">Manage Roles</span>
