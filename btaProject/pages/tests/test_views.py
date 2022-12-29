@@ -132,7 +132,40 @@ class ProjectPKSharedTestsMixin:
         response = self.get_response()
         self.assertEqual(response.status_code, 302)
 
-    
+class TicketPKSharedTestsMixin:
+    """
+    Includes standard tests for views requiring a specific ticket PK to acccess
+    """
+    view = None
+    name = ''
+    url = ''
+    template = ''
+    permission_name = ''
+    permission_codename = ''
+    factory = RequestFactory()
+
+    def set_user_permission(self):
+        content_type = factories.ContentTypeFactory(app_label='pages', model='ticket')
+        ticket_perm = factories.PermissionFactory(name=self.permission_name, codename=self.permission_codename, content_type=content_type)
+        self.user.user_permissions.add(ticket_perm)
+        self.user.save()
+
+    def get_response(self):
+        kwargs = {'pk': str(self.ticket.pk)}
+        request = self.factory.get(self.url)
+        request.user = self.user
+        return self.view.as_view()(request, **kwargs)
+
+    def test_page_loads_if_project_is_active_with_permission(self):
+        """Returns true if page loads when project is active"""
+        self.set_user_permission()
+        response = self.get_response()
+        self.assertEqual(response.status_code, 200)
+
+    def test_page_redirects_if_user_is_not_permitted(self):
+        """Returns true if user is not permitted and so is redirected"""
+        response = self.get_response()
+        self.assertEqual(response.status_code, 302)  
 
 class ValidUserTestCase(TestCase):
     """
@@ -318,7 +351,7 @@ class ManageUserRolesViewTests(PermissionSharedTestsMixin, ValidUserTestCase):
     url = 'roles/'
     template = 'manage_roles.html'
     permission_model = get_user_model()
-    permission_codename = 'change_customuser'
+    permission_codename = 'change_user'
 
     def test_correctly_loads_context_data_with_permission(self):
         """Returns true if context includes users, excluding superusers"""
@@ -453,18 +486,18 @@ class TicketUpdateViewTests(ValidUserTestCase):
 
 
 
-class UploadTicketFileView(PermissionSharedTestsMixin, ValidUserTestCase):
+class UploadTicketFileViewTests(TicketPKSharedTestsMixin, ValidUserTestCase):
     view = views.UploadTicketFileView
     name = 'upload_ticket_file'
     url = 'tickets/newfile'
     template = 'upload_ticket_file.html'
+    permission_name = 'User can add ticket files'
+    permission_codename = 'add_ticketfiles'
 
 
-    def set_user_permission(self):
-        content_type = factories.ContentTypeFactory(app_label='pages', model='ticketfiles')
-        add_file_perm = factories.PermissionFactory(name='User can add ticketfiles', codename='add_ticketfiles', content_type=content_type)
-        self.user.user_permissions.add(add_file_perm)
-        self.user.save()
+    def setUp(self):
+        project = factories.ProjectFactory(title='Test Project', description='Test Project Description')
+        self.ticket = factories.TicketFactory(title='Test Ticket', description='Test', project=project, submitter=self.user)
 
 
         
