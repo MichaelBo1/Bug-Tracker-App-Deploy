@@ -5,13 +5,13 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from .models import Project, Ticket, TicketComment, TicketFiles
-
+from accounts.models import CustomUser
 
 ROLES = [
-    ('AD', 'Administrator'),
-    ('PM', 'Project Manager'),
-    ('DV', 'Developer'),
-    ('SM', 'Submitter')
+    (CustomUser.Roles.ADMINISTRATOR, 'Administrator'),
+    (CustomUser.Roles.PROJECT_MANAGER, 'Project Manager'),
+    (CustomUser.Roles.DEVELOPER, 'Developer'),
+    (CustomUser.Roles.SUBMITTER, 'Submitter')
 ]
 
 
@@ -50,7 +50,7 @@ class TicketUpdateForm(ModelForm):
         Changes queryset to only show developers that can be assigned a ticket
         """
         super(TicketUpdateForm, self).__init__(*args, **kwargs)
-        self.fields['assigned_developer'].queryset = get_user_model().objects.filter(is_superuser=False, user_role='DV')
+        self.fields['assigned_developer'].queryset = get_user_model().objects.filter(is_superuser=False, user_role=CustomUser.Roles.DEVELOPER)
 
     class Meta:
         model = Ticket
@@ -71,8 +71,8 @@ class ProjectCreateForm(ModelForm):
         """
         self.user = kwargs.pop('user')
         super(ProjectCreateForm, self).__init__(*args, **kwargs)
-        self.fields['project_manager'].queryset = get_user_model().objects.filter(user_role='PM')
-        self.fields['assigned_personnel'].queryset = get_user_model().objects.exclude(Q(is_superuser=True) | Q(user_role__in=['AD', 'PM']) | Q(pk=self.user.pk))
+        self.fields['project_manager'].queryset = get_user_model().objects.filter(user_role=CustomUser.Roles.PROJECT_MANAGER)
+        self.fields['assigned_personnel'].queryset = get_user_model().objects.exclude(Q(is_superuser=True) | Q(user_role__in=[CustomUser.Roles.ADMINISTRATOR, CustomUser.Roles.PROJECT_MANAGER]) | Q(pk=self.user.pk))
 
     class Meta:
         model = Project
@@ -99,15 +99,11 @@ class ManageProjectUsersForm(ModelForm):
         fields = ['assigned_personnel', 'project_manager']
     def __init__(self, *args, **kwargs):
         super(ManageProjectUsersForm, self).__init__(*args, **kwargs)
-        self.fields['assigned_personnel'].queryset = get_user_model().objects.exclude(Q(is_superuser=True) | Q(user_role__in=['AD', 'PM']))
-        self.fields['project_manager'].queryset = get_user_model().objects.filter(user_role='PM')
+        self.fields['assigned_personnel'].queryset = get_user_model().objects.exclude(Q(is_superuser=True) | Q(user_role__in=[CustomUser.Roles.ADMINISTRATOR, CustomUser.Roles.PROJECT_MANAGER]))
+        self.fields['project_manager'].queryset = get_user_model().objects.filter(user_role=CustomUser.Roles.PROJECT_MANAGER)
 
 
 class TicketFilesForm(ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        super(TicketFilesForm, self).__init__(*args, **kwargs)
-        self.fields['ticket'].queryset = Ticket.objects.filter(status='OPEN')
     class Meta:
         model = TicketFiles
-        exclude = ['date_uploaded', 'uploaded_by']
+        fields = ['file']

@@ -278,10 +278,13 @@ class UploadTicketFileView(UserAccessMixin, FormView):
 
 
     def form_valid(self, form):
+        pk = self.kwargs['pk']
+        ticket = get_object_or_404(Ticket, pk=pk)
         new_file = TicketFiles(
             uploaded_by = self.request.user,
-            ticket = form.cleaned_data['ticket'],
+            ticket = ticket,
             file = form.cleaned_data['file']
         )
         new_file.save()
         return super().form_valid(form)
+
