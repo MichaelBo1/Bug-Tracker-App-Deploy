@@ -272,10 +272,12 @@ class TicketSubmitView(UserAccessMixin, FormView):
 class UploadTicketFileView(UserAccessMixin, FormView):
     permission_required = 'pages.add_ticketfiles'
     model = TicketFiles
-    success_url = '/tickets/'
     template_name = 'upload_ticket_file.html'
     form_class = TicketFilesForm
 
+    def get_success_url(self):
+        pk = self.kwargs['pk']
+        return reverse('ticket_details', kwargs={'pk': pk})
 
     def form_valid(self, form):
         pk = self.kwargs['pk']
