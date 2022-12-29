@@ -11,7 +11,7 @@ Project Users
         <form method="POST">
             {% csrf_token %}
             {{ form|crispy }}
-            <button class="btn table-btn" type="submit">
+            <button class="btn table-btn" type="submit" {% if request.user.is_demo %} disabled {% endif %}>
                 Update Users
             </button>
     
