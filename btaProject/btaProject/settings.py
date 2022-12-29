@@ -11,9 +11,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-!%y1i9^k!q@n2siax1oe!o0=sb)*0_xmva2l%enb$l0r1&exvo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -150,9 +150,6 @@ AUTHENTICATION_BACKENDS = (
     "accounts.backends.DemoUserAuthenticationBackend",
 )
 
-ACCOUNT_FORMS = {
-'signup': 'accounts.forms.CustomUserRoleSignupForm',
-}
 
 
 SITE_ID = 1
@@ -184,10 +181,7 @@ AWS_S3_REGION_NAME = 'eu-west-2'
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, 'static'),
-        )
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/tickets/'
