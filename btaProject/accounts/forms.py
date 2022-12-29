@@ -21,23 +21,6 @@ class CustomUserChangeForm(UserChangeForm):
             'email',
         ]
         
-        
-class CustomUserRoleSignupForm(SignupForm):
-    """Extends default allauth signup form to include selection of each user role"""
-    ROLE_CHOICES = [
-        ('AD', _('Administrator')),
-        ('PM', _('Project Manager')),
-        ('DV', _('Developer')),
-        ('SM', _('Submitter'))
-    ]
-        
-    user_role = forms.ChoiceField(choices=ROLE_CHOICES, label='Select Role To Demo')
-
-    def save(self, request):
-        user = super().save(request)
-        user.user_role = self.cleaned_data['user_role']
-        user.save()
-        return user
     
 class DemoLoginForm(forms.Form):
     demo_user = forms.ChoiceField(
