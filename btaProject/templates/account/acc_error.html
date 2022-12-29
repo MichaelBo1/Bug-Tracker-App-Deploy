@@ -1,0 +1,13 @@
+{% extends "account/base.html" %}
+
+{% block title %}
+    Error
+{% endblock title%}
+
+{% block content %}
+<div>
+    <h1 class="text-uppercase fw-bold blue-txt"> <i class="fa-solid fa-bug"></i>Bug Tracker </h1>
+    <h2 class="mb-2 text-uppercase blue-txt">Error</h2>
+    <p class="pt-5 fw-bold text-muted">There was an error when logging in. Please try again. <a href="{% url 'demo_login' %}">Try again</a></p>
+</div>
+{% endblock content %}

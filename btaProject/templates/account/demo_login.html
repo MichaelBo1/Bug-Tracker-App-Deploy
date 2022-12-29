@@ -2,17 +2,17 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-    Login
+    Demo Login
 {% endblock title%}
 
 {% block content %}
 <div>
     <h1 class="text-uppercase fw-bold blue-txt"> <i class="fa-solid fa-bug"></i>Bug Tracker </h1>
-    <h2 class="mb-2 text-uppercase blue-txt">Login</h2>
+    <h2 class="mb-2 text-uppercase blue-txt">Login as a Demo User</h2>
     <form method="POST">
         {% csrf_token %}
         {{ form|crispy }}
-        <button class="mt-2 btn table-btn" type="submit">Log In</button>
+        <button class="mt-2 btn table-btn" type="submit">Demo Login</button>
     </form>
     {% if messages %}
         {% for message in messages %}
@@ -23,9 +23,7 @@
     {% endif %}
     
 
-    <p class="pt-5 fw-bold text-muted">Don't have an account? <a href="{% url 'account_signup' %}">Sign Up</a></p>
-    <p class="fw-bold text-muted">Forgot your password? <a href="{% url 'account_reset_password' %}">Reset</a></p>
-    <p class="fw-bold text-muted">Want to Demo? <a href="{% url 'demo_login' %}">Login as Demo User</a></p>
-
+    <p class="pt-5 fw-bold text-muted">Want a real account? <a href="{% url 'account_signup' %}">Sign Up</a></p>
+    <p class="fw-bold text-muted">Already have an account? <a href="{% url 'account_login' %}">Login</a></p>
 </div>
 {% endblock content %}

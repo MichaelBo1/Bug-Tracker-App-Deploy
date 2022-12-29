@@ -38,5 +38,16 @@ class CustomUserRoleSignupForm(SignupForm):
         user.user_role = self.cleaned_data['user_role']
         user.save()
         return user
+    
+class DemoLoginForm(forms.Form):
+    demo_user = forms.ChoiceField(
+        label=_('Demo User'),
+        choices=[
+            ('demo1', 'Demo Administrator'),
+            ('demo2', 'Demo Project Manager'),
+            ('demo3', 'Demo Developer'),
+            ('demo4', 'Demo Submitter'),
+        ]
+    )
 
 

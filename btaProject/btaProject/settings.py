@@ -145,6 +145,9 @@ AUTHENTICATION_BACKENDS = (
 
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
+    
+    # backend to allow users to login on demo account
+    "accounts.backends.DemoUserAuthenticationBackend",
 )
 
 ACCOUNT_FORMS = {
