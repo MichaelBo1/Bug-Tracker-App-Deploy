@@ -87,8 +87,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'testdb',
         'USER': 'postgres',
-        'PASSWORD': 'jAmm1471%',
-        'HOST': '45.76.128.211',
+        'PASSWORD': os.environ.get('PG_PASSWORD')
+        'HOST': os.environ.get('PG_HOST')
         'PORT': '5432',
     }
 }
@@ -162,8 +162,8 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_UNIQUE_EMAIL = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
